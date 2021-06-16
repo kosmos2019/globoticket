@@ -1,0 +1,155 @@
+version: '3.4'
+
+services:
+    globoticket.web:
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - ASPNETCORE_URLS=http://+:443;http://+:80
+        ports:
+          - "80"
+          - "443"
+        volumes:
+          - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+          - ~/.aspnet/https:/root/.aspnet/https:ro  
+
+    globoticket.services.eventcatalog:
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - ASPNETCORE_URLS=http://+:443;http://+:80
+          - ConnectionStrings__DefaultConnection=Data Source=db;Initial Catalog=GloboTicketEventCatalogDb;Integrated Security=False;User ID=sa;Password=Pa$$word098765;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;
+        ports:
+          - "80"
+          - "443"
+        volumes:
+          - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+          - ~/.aspnet/https:/root/.aspnet/https:ro
+        depends_on:
+          - db
+          
+    globoticket.services.discount:
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - ASPNETCORE_URLS=http://+:443;http://+:80
+          - ConnectionStrings__DefaultConnection=Data Source=db;Initial Catalog=GloboTicketDiscountDB;Integrated Security=False;User ID=sa;Password=Pa$$word098765;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;
+        ports:
+          - "80"
+          - "443"
+        volumes:
+          - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+          - ~/.aspnet/https:/root/.aspnet/https:ro
+        depends_on:
+          - db
+
+    globoticket.services.shoppingbasket:
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Development
+          - ASPNETCORE_URLS=http://+:443;http://+:80
+          - ConnectionStrings__DefaultConnection=Data Source=db;Initial Catalog=GloboTicketShoppingBasketDb;Integrated Security=False;User ID=sa;Password=Pa$$word098765;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;
+        ports:
+          - "80"
+          - "443"
+        volumes:
+          - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+          - ~/.aspnet/https:/root/.aspnet/https:ro
+        depends_on:
+          - db
+    
+    external.paymentgateway:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:443;http://+:80
+        ports:
+            - "80"
+            - "443"
+        volumes:
+            - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+            - ~/.aspnet/https:/root/.aspnet/https:ro
+
+    globoticket.web.bff:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:443;http://+:80
+        ports:
+            - "80"
+            - "443"
+        volumes:
+            - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+            - ~/.aspnet/https:/root/.aspnet/https:ro
+
+    globoticket.gateway.mobilebff:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:443;http://+:80
+        ports:
+            - "80"
+            - "443"
+        volumes:
+            - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+            - ~/.aspnet/https:/root/.aspnet/https:ro
+    
+    globoticket.gateway.webbff:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:443;http://+:80
+        ports:
+            - "80"
+            - "443"
+        volumes:
+            - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+            - ~/.aspnet/https:/root/.aspnet/https:ro    
+
+    globoticket.services.marketing:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:443;http://+:80
+            - ConnectionStrings__DefaultConnection=Data Source=db;Initial Catalog=GloboTicketMarketingDb;Integrated Security=False;User ID=sa;Password=Pa$$word098765;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;
+        ports:
+            - "80"
+            - "443"
+        volumes:
+            - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+            - ~/.aspnet/https:/root/.aspnet/https:ro
+    
+    globoticket.services.ordering:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:443;http://+:80
+            - ConnectionStrings__DefaultConnection=Data Source=db;Initial Catalog=GloboTicketOrderDb;Integrated Security=False;User ID=sa;Password=Pa$$word098765;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;
+            - ServiceBusConnectionString=Endpoint=sb://jbgloboticket.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=XI5MGNhR2HcsiovLvMcK1pmrVWPpgT4Qu8MmtkssEL4=
+            - CheckoutMessageTopic=checkoutmessage
+            - OrderPaymentRequestMessageTopic=orderpaymentrequestmessage
+            - OrderPaymentUpdatedMessageTopic=orderpaymentupdatedmessage
+        ports:
+            - "80"
+            - "443"
+        volumes:
+            - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+            - ~/.aspnet/https:/root/.aspnet/https:ro
+        depends_on:
+            - db
+
+    globoticket.services.payment:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://+:443;http://+:80
+            - ServiceBusConnectionString=Endpoint=sb://jbgloboticket.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=XI5MGNhR2HcsiovLvMcK1pmrVWPpgT4Qu8MmtkssEL4=
+            - subscriptionName=globoticketpayment
+            - OrderPaymentRequestMessageTopic=orderpaymentrequestmessage
+            - OrderPaymentUpdatedMessageTopic=orderpaymentupdatedmessage
+        ports:
+            - "80"
+            - "443"
+        volumes:
+            - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+            - ~/.aspnet/https:/root/.aspnet/https:ro
+        depends_on:
+            - db
+            
+    db:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        expose:
+            - "1433"
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=Pa$$word098765
+            - network.tlsprotocols=1.0

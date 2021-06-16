@@ -39,7 +39,10 @@ namespace GloboTicket.Services.Payment
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            if (Configuration["DOTNET_RUNNING_IN_CONTAINER"] != "true")
+            {
+                app.UseHttpsRedirection();
+            }            
 
             app.UseRouting();
 
