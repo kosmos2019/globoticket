@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: globoticket-services-shoppingbasket
-        image: globoticketacr.azurecr.io/globoticket.services.shoppingbasket:1
+        image: jbdgloboticketacr.azurecr.io/globoticket.services.shoppingbasket:1
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
