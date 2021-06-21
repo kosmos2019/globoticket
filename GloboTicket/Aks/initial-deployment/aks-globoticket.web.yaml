@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-globoticket-web
+  labels:
+    version: dev
+    product: globoticket-web
+spec:
+  selector:
+    app: globoticket-web
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  - port: 443
+    targetPort: 443
+    protocol: TCP
+    name: https
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep-globoticket-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: globoticket-web
+  template:
+    metadata:
+      labels:
+        app: globoticket-web
+    spec:
+      containers:
+      - name: globoticket-web
+        image: jbdgloboticketacr.azurecr.io/globoticket.web:2
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: ASPNETCORE_URLS
+          value: http://+:80
+        - name: ApiConfigs__EventCatalog__Uri
+          value: http://svc-globoticket-services-eventcatalog
+        - name: ApiConfigs__ShoppingBasket__Uri
+          value: http://svc-globoticket-services-shoppingbasket
+        - name: ApiConfigs__Payment__Uri
+          value: http://svc-globoticket-services-payment
+        - name: ApiConfigs__Order__Uri
+          value: http://svc-globoticket-services-ordering
+        - name: ApiConfigs__Marketing__Uri
+          value: http://svc-globoticket-services-marketing
+        - name: ApiConfigs__Eventcatalog__Uri
+          value: http://svc-globoticket-services-eventcatalog
+        - name:  ApiConfigs__Discount__Uri
+          value: http://svc-globoticket-services-discount
+        imagePullPolicy : Always
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        resources:
+          limits:
+            cpu: "0.15"
+      imagePullSecrets:
+        - name: acr-secret
