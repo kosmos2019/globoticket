@@ -50,7 +50,9 @@ namespace GloboTicket.Services.Discount
                 }
             }
 
-            app.UseHttpsRedirection();
+            if (Configuration["DOTNET_RUNNING_IN_CONTAINER"] != "true") {
+                app.UseHttpsRedirection();
+            }            
 
             app.UseSwagger();
 
