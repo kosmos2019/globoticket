@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: globoticket-services-discount
-        image: jbdgloboticketacr.azurecr.io/globoticket.services.discount:1
+        image: jbdgloboticketacr.azurecr.io/globoticket.services.discount:2
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production

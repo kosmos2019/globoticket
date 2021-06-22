@@ -23,7 +23,7 @@ services:
     image: jbdgloboticketacr.azurecr.io/globoticket.gateway.webbff:1
   
   globoticket.services.discount:
-    image: jbdgloboticketacr.azurecr.io/globoticket.services.discount:1
+    image: jbdgloboticketacr.azurecr.io/globoticket.services.discount:2
   
   globoticket.services.marketing:
     image: jbdgloboticketacr.azurecr.io/globoticket.services.marketing:1
